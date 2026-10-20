@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: edgelog
+      POSTGRES_PASSWORD: edgelog
+      POSTGRES_DB: edgelog
+    volumes: [pgdata:/var/lib/postgresql/data]
+    ports: ["5432:5432"]
+  api:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://edgelog:edgelog@db:5432/edgelog
+    ports: ["8080:8080"]
+    depends_on: [db]
+volumes:
+  pgdata:
